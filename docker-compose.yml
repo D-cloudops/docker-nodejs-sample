@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:13.22
+    container_name: HOST
+    environment:
+      POSTGRES_PASSWORD: PASSWORD
+      POSTGRES_USER: USER
+      POSTGRES_DB: DB
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - db_app_connect
+    
+  app:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: HOST
+      POSTGRES_USER: USER
+      POSTGRES_DB: DB
+      POSTGRES_PASSWORD: PASSWORD
+    networks:
+      - db_app_connect
+
+volumes:
+  db_data:
+
+networks:
+  db_app_connect:
+    driver: bridge
+  
+
+
+
+
