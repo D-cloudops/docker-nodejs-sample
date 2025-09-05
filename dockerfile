@@ -6,7 +6,11 @@ COPY package*.json .
 
 RUN npm install 
 
-COPY . .
+RUN adduser -s /bin/sh -D appuser
+
+COPY --chown=appuser . .
+
+USER appuser 
 
 EXPOSE 3000
 
